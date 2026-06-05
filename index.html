@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>楠梓區健康減重聯盟</title>
+    <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: 'Helvetica Neue', Arial, 'LiHei Pro', sans-serif; background-color: #f0f4f8; margin: 0; padding: 12px; color: #333; line-height: 1.5; }
+        .header { background: linear-gradient(135deg, #16a085, #2ecc71); color: white; padding: 14px 12px; border-radius: 10px; text-align: center; box-shadow: 0 3px 6px rgba(0,0,0,0.1); margin-bottom: 12px; }
+        .header h1 { margin: 0; font-size: 22px; font-weight: bold; letter-spacing: 1px;}
+        .header p { margin: 4px 0 0 0; font-size: 14px; opacity: 0.95; font-weight: 500;}
+        .card { background: white; border-radius: 10px; padding: 12px 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.06); margin-bottom: 12px; }
+        .card-title { margin: 0 0 10px 0; font-size: 16px; color: #2c3e50; font-weight: bold; border-left: 4px solid #3498db; padding-left: 8px; }
+        .profile-row { display: flex; align-items: center; gap: 12px; }
+        .profile-img { width: 50px; height: 50px; border-radius: 50%; border: 2px solid #2ecc71; background-color: #eee; flex-shrink: 0; }
+        .profile-info { flex-grow: 1; display: flex; flex-direction: column; justify-content: center;}
+        .profile-info h3 { margin: 0 0 4px 0; font-size: 17px; color: #2c3e50; }
+        select.village-select { width: 100%; padding: 8px; font-size: 15px; border-radius: 6px; border: 1px solid #ccc; background-color: #fff; }
+        .responsive-layout { display: flex; flex-direction: column; gap: 0; }
+        @media (min-width: 768px) { .responsive-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; } .card { margin-bottom: 0; height: 100%; display: flex; flex-direction: column; } }
+        .goal-item { background-color: #f8fcf8; border: 1px dashed #2ecc71; border-radius: 8px; padding: 10px; margin-bottom: 8px; }
+        .goal-item:last-child { margin-bottom: 0; }
+        .goal-item label { display: flex; align-items: flex-start; font-size: 15px; font-weight: bold; color: #2c3e50; cursor: pointer; }
+        .goal-item input[type="checkbox"] { width: 20px; height: 20px; margin-right: 10px; margin-top: 2px; accent-color: #2ecc71; flex-shrink: 0; }
+        .recommend-text { display: block; font-size: 12px; color: #7f8c8d; font-weight: normal; margin-top: 4px; }
+        .weight-box { display: flex; flex-direction: column; gap: 10px; margin-top: 15px; flex-grow: 1; justify-content: flex-end; }
+        input[type="number"] { width: 100%; padding: 12px; font-size: 18px; text-align: center; border: 2px solid #ddd; border-radius: 8px; background-color: #fafafa; }
+        .btn-submit { width: 100%; background-color: #e67e22; color: white; border: none; border-radius: 8px; padding: 14px; font-size: 18px; font-weight: bold; box-shadow: 0 3px 0 #d35400; cursor: pointer; }
+        .btn-submit:active { transform: translateY(2px); box-shadow: none; }
+        .week-group { background-color: #f9f9f9; border: 1px solid #e0e0e0; border-radius: 8px; padding: 10px; margin-bottom: 10px; }
+        .week-group:last-child { margin-bottom: 0; }
+        .week-badge { background-color: #ffeaa7; color: #d35400; padding: 2px 10px; border-radius: 12px; font-weight: bold; font-size: 13px; margin-bottom: 8px; display: inline-block; }
+        .video-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .btn-video { width: 100%; background-color: #3498db; color: white; border: none; border-radius: 6px; padding: 10px 6px; font-size: 13px; font-weight: bold; text-align: center; box-shadow: 0 3px 0 #2980b9; cursor: pointer; line-height: 1.3; display: flex; align-items: center; justify-content: center; }
+        .btn-video:active { transform: translateY(2px); box-shadow: none; }
+        .btn-disabled { background-color: #bdc3c7 !important; box-shadow: 0 3px 0 #95a5a6 !important; pointer-events: none; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>楠梓區健康減重聯盟</h1>
+        <p>線上相揪動一動・37里健康逗陣行</p>
+    </div>
+
+    <div class="card profile-row">
+        <img id="userPicture" class="profile-img" src="data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='12' fill='%232ecc71'/%3E%3Ccircle cx='12' cy='8' r='4' fill='%23ffffff'/%3E%3Cpath d='M4 20c0-4 4-5 8-5s8 1 8 5' fill='%23ffffff'/%3E%3C/svg%3E" alt="頭像">
+        <div class="profile-info">
+            <h3 id="userName">鄰里長，您好！</h3>
+            <select class="village-select" id="villageSelect">
+                <option value="" disabled selected>請選擇里別 (共37里)...</option>
+                <option value="久昌里">久昌里</option><option value="大昌里">大昌里</option>
+                <option value="中和里">中和里</option><option value="中陽里">中陽里</option>
+                <option value="中興里">中興里</option><option value="五常里">五常里</option>
+                <option value="仁昌里">仁昌里</option><option value="加昌里">加昌里</option>
+                <option value="玉屏里">玉屏里</option><option value="宏昌里">宏昌里</option>
+                <option value="宏南里">宏南里</option><option value="宏榮里">宏榮里</option>
+                <option value="宏毅里">宏毅里</option><option value="秀昌里">秀昌里</option>
+                <option value="享平里">享平里</option><option value="和昌里">和昌里</option>
+                <option value="東寧里">東寧里</option><option value="金田里">金田里</option>
+                <option value="建昌里">建昌里</option><option value="泰昌里">泰昌里</option>
+                <option value="國昌里">國昌里</option><option value="清豐里">清豐里</option>
+                <option value="盛昌里">盛昌里</option><option value="惠民里">惠民里</option>
+                <option value="惠楠里">惠楠里</option><option value="惠豐里">惠豐里</option>
+                <option value="隆昌里">隆昌里</option><option value="瑞屏里">瑞屏里</option>
+                <option value="稔田里">稔田里</option><option value="裕昌里">裕昌里</option>
+                <option value="福昌里">福昌里</option><option value="翠屏里">翠屏里</option>
+                <option value="廣昌里">廣昌里</option><option value="慶昌里">慶昌里</option>
+                <option value="興昌里">興昌里</option><option value="錦屏里">錦屏里</option>
+                <option value="藍田里">藍田里</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="responsive-layout">
+        <div class="column-a">
+            <div class="card">
+                <h2 class="card-title">✅ 本週目標</h2>
+                <div class="goal-item"><label><input type="checkbox" id="chk-water"><div>💧 喝水達標<span class="recommend-text">建議：每日 1500cc 以上</span></div></label></div>
+                <div class="goal-item"><label><input type="checkbox" id="chk-veggie"><div>🥗 蔬菜達標<span class="recommend-text">建議：每日 3 份 (約1.5碗)</span></div></label></div>
+                <div class="goal-item"><label><input type="checkbox" id="chk-sport"><div>🚶 運動達標<span class="recommend-text">建議：每週累積 150 分鐘</span></div></label></div>
+                <div class="weight-box">
+                    <h2 class="card-title" style="margin-bottom:0;">📝 體重紀錄</h2>
+                    <input type="number" id="weightInput" inputmode="decimal" step="0.1" placeholder="本週體重 (kg)">
+                    <button class="btn-submit" id="btn-weekly" onclick="submitWeekly()">🏆 送出回報</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="column-b">
+            <div class="card">
+                <h2 class="card-title">📺 課程進度</h2>
+                <div class="week-group"><div class="week-badge">第 1 週</div><div class="video-grid"><button class="btn-video" id="btn-vid1" onclick="watchVideo('vid1', '(一) 飲食前測')">▶️ (一) 飲食前測</button><button class="btn-video" id="btn-vid2" onclick="watchVideo('vid2', '(二) 減重認知')">▶️ (二) 減重認知</button></div></div>
+                <div class="week-group"><div class="week-badge">第 2 週</div><div class="video-grid"><button class="btn-video" id="btn-vid3" onclick="watchVideo('vid3', '(三) 肥胖與慢性病')">▶️ (三) 慢性病</button><button class="btn-video" id="btn-vid4" onclick="watchVideo('vid4', '(四) 運動實務')">▶️ (四) 運動實務</button></div></div>
+                <div class="week-group"><div class="week-badge">第 3 週</div><div class="video-grid"><button class="btn-video" id="btn-vid5" onclick="watchVideo('vid5', '(五) 壓力睡眠')">▶️ (五) 壓力睡眠</button><button class="btn-video" id="btn-vid6" onclick="watchVideo('vid6', '(六) 推動技巧')">▶️ (六) 推動技巧</button></div></div>
+                <div class="week-group"><div class="week-badge">第 4 週</div><div class="video-grid"><button class="btn-video" id="btn-vid7" onclick="watchVideo('vid7', '(七) 政策資源')">▶️ (七) 政策資源</button><button class="btn-video" id="btn-vid8" onclick="watchVideo('vid8', '(八) 成果後測')">▶️ (八) 成果後測</button></div></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // 🔑 第零步：請在這裡填入您的兩把「金鑰」
+        // ==========================================
+        const MY_LIFF_ID = "2010304332-eNbuCpDo"; 
+        const API_URL = "https://script.google.com/macros/s/AKfycbyoK4uC5tsjb4nR4rph8Tdv5V5liSm_3SWy9ewWI6tSigfMKHrhnL2WMqL0hZotobHI/exec";
+        
+        let currentUserProfile = null;
+
+        // 1. 初始化 LINE LIFF (自動抓取使用者名稱與頭像)
+        window.onload = function() {
+            if(MY_LIFF_ID === "請填入您的_LIFF_ID") return; // 若未填金鑰，則維持預設畫面供本地測試
+            
+            liff.init({ liffId: MY_LIFF_ID }).then(() => {
+                if (liff.isLoggedIn()) {
+                    liff.getProfile().then(profile => {
+                        currentUserProfile = profile;
+                        document.getElementById("userName").innerText = profile.displayName + "，您好！";
+                        if(profile.pictureUrl) { document.getElementById("userPicture").src = profile.pictureUrl; }
+                    });
+                } else {
+                    liff.login();
+                }
+            }).catch(err => console.error("LIFF 初始化失敗", err));
+        };
+
+        // 2. 觀看影片打卡 (傳送進度到 Google 試算表)
+        function watchVideo(vidId, videoName) {
+            let btn = document.getElementById("btn-" + vidId);
+            btn.innerText = "⏳ 讀取中";
+            btn.classList.add("btn-disabled");
+
+            if(currentUserProfile && API_URL !== "請填入您的_GAS_網頁應用程式_URL") {
+                let data = { action: "watch_video", lineId: currentUserProfile.userId, userName: currentUserProfile.displayName, videoName: videoName };
+                fetch(API_URL, { method: "POST", body: JSON.stringify(data) })
+                .then(res => res.json())
+                .then(result => { btn.innerText = "✔️ 已完課"; alert("進度更新：您已完成【" + videoName + "】！"); })
+                .catch(err => { btn.innerText = "▶️ 再試一次"; btn.classList.remove("btn-disabled"); });
+            } else {
+                btn.innerText = "✔️ 已完課";
+                alert("進度更新：您已完成【" + videoName + "】！(未連線測試模式)");
+            }
+        }
+
+        // 3. 送出每週回報 (傳送到 Google 試算表)
+        function submitWeekly() {
+            let village = document.getElementById("villageSelect").value;
+            let weightVal = document.getElementById("weightInput").value;
+            
+            if(!village) { alert("請在最上方選擇里別！"); return; }
+            if (!weightVal) { alert("請輸入本週體重數值！"); return; }
+
+            let water = document.getElementById("chk-water").checked;
+            let veggie = document.getElementById("chk-veggie").checked;
+            let sport = document.getElementById("chk-sport").checked;
+
+            if(!water && !veggie && !sport) {
+                if(!confirm("本週尚未勾選任何目標，確定直接送出嗎？")) return;
+            }
+
+            let btn = document.getElementById("btn-weekly");
+            btn.innerText = "⏳ 傳送中...";
+            btn.classList.add("btn-disabled");
+
+            if(currentUserProfile && API_URL !== "https://script.google.com/macros/s/AKfycbyoK4uC5tsjb4nR4rph8Tdv5V5liSm_3SWy9ewWI6tSigfMKHrhnL2WMqL0hZotobHI/exec") {
+                let data = { action: "weekly_report", lineId: currentUserProfile.userId, userName: currentUserProfile.displayName, village: village, weight: weightVal, water: water, veggie: veggie, sport: sport };
+                fetch(API_URL, { method: "POST", body: JSON.stringify(data) })
+                .then(res => res.json())
+                .then(result => {
+                    btn.innerText = "🎉 已送出";
+                    document.getElementById("weightInput").disabled = true;
+                    document.getElementById("chk-water").disabled = true;
+                    document.getElementById("chk-veggie").disabled = true;
+                    document.getElementById("chk-sport").disabled = true;
+                    alert("紀錄成功！資料已安全送出至區公所資料庫。");
+                })
+                .catch(err => {
+                    btn.innerText = "🏆 送出回報";
+                    btn.classList.remove("btn-disabled");
+                    alert("連線失敗，請檢查網路狀態後再試一次。");
+                });
+            } else {
+                btn.innerText = "🎉 已送出";
+                alert("紀錄成功！(未連線測試模式)");
+            }
+        }
+    </script>
+</body>
+</html>

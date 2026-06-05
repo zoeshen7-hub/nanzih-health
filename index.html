@@ -100,17 +100,14 @@
     </div>
 
     <script>
-        // ==========================================
-        // 🔑 第零步：請在這裡填入您的兩把「金鑰」
-        // ==========================================
+        // 金鑰已為您自動填妥
         const MY_LIFF_ID = "2010304332-eNbuCpDo"; 
         const API_URL = "https://script.google.com/macros/s/AKfycbyoK4uC5tsjb4nR4rph8Tdv5V5liSm_3SWy9ewWI6tSigfMKHrhnL2WMqL0hZotobHI/exec";
         
         let currentUserProfile = null;
 
-        // 1. 初始化 LINE LIFF (自動抓取使用者名稱與頭像)
         window.onload = function() {
-            if(MY_LIFF_ID === "2010304332-eNbuCpDo") return; // 若未填金鑰，則維持預設畫面供本地測試
+            if(MY_LIFF_ID === "請填入您的_LIFF_ID") return;
             
             liff.init({ liffId: MY_LIFF_ID }).then(() => {
                 if (liff.isLoggedIn()) {
@@ -125,7 +122,6 @@
             }).catch(err => console.error("LIFF 初始化失敗", err));
         };
 
-        // 2. 觀看影片打卡 (傳送進度到 Google 試算表)
         function watchVideo(vidId, videoName) {
             let btn = document.getElementById("btn-" + vidId);
             btn.innerText = "⏳ 讀取中";
@@ -143,7 +139,6 @@
             }
         }
 
-        // 3. 送出每週回報 (傳送到 Google 試算表)
         function submitWeekly() {
             let village = document.getElementById("villageSelect").value;
             let weightVal = document.getElementById("weightInput").value;
@@ -163,7 +158,7 @@
             btn.innerText = "⏳ 傳送中...";
             btn.classList.add("btn-disabled");
 
-            if(currentUserProfile && API_URL !== "https://script.google.com/macros/s/AKfycbyoK4uC5tsjb4nR4rph8Tdv5V5liSm_3SWy9ewWI6tSigfMKHrhnL2WMqL0hZotobHI/exec") {
+            if(currentUserProfile && API_URL !== "請填入您的_GAS_網頁應用程式_URL") {
                 let data = { action: "weekly_report", lineId: currentUserProfile.userId, userName: currentUserProfile.displayName, village: village, weight: weightVal, water: water, veggie: veggie, sport: sport };
                 fetch(API_URL, { method: "POST", body: JSON.stringify(data) })
                 .then(res => res.json())
